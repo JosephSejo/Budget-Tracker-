@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 100%;
+            max-width: 450px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+            margin-top: 25px;
+        }
+
+        /* Input Sections */
+        .input-section {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"], input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* Button Styles */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-green {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-red {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-blue {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .btn-gray {
+            background-color: #888;
+            color: white;
+        }
+
+        .btn-purple {
+            background-color: #9C27B0;
+            color: white;
+        }
+
+        /* Displaying Expenses and Incomes */
+        .expense-list {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        li {
+            background-color: #f8f8f8;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            border-left: 6px solid #4CAF50;
+        }
+
+        li:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+
+        /* Balance Section */
+        .balance-section {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .balance-section h3 {
+            margin-bottom: 12px;
+        }
+
+        /* Buttons container */
+        .buttons {
+            margin-top: 20px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .input-section input,
+            .btn {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Budget Tracker</h1>
+
+        <!-- Income Section -->
+        <div class="input-section">
+            <label for="income-amount">Income (Ksh):</label>
+            <input type="number" id="income-amount" placeholder="Enter income amount" min="0">
+            <label for="income-date">Date:</label>
+            <input type="date" id="income-date">
+            <button id="add-income" class="btn btn-green">Add Income</button>
+        </div>
+
+        <!-- Expense Section -->
+        <div class="input-section">
+            <label for="expense-name">Expense Name:</label>
+            <input type="text" id="expense-name" placeholder="e.g., Groceries">
+
+            <label for="expense-amount">Amount (Ksh):</label>
+            <input type="number" id="expense-amount" placeholder="Amount" min="0">
+
+            <label for="expense-date">Date:</label>
+            <input type="date" id="expense-date">
+            <button id="add-expense" class="btn btn-red">Add Expense</button>
+        </div>
+
+        <!-- Displaying Expenses and Incomes -->
+        <div class="expense-list">
+            <h2>Expenses and Incomes</h2>
+            <ul id="expense-list"></ul>
+        </div>
+
+        <!-- Total Income, Balance, and Remaining Balance -->
+        <div class="balance-section">
+            <h3>Total Income: <span id="total-income">Ksh 0</span></h3>
+            <h3>Total Expenses: <span id="total-balance">Ksh 0</span></h3>
+            <h3>Remaining Balance: <span id="remaining-balance">Ksh 0</span></h3>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button id="print-button" class="btn btn-blue">Print Report</button>
+            <button id="reset-button" class="btn btn-gray">Reset Tracker</button>
+            <button id="save-button" class="btn btn-purple">Save Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize total balance, income, expenses array
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        let totalIncome = JSON.parse(localStorage.getItem('totalIncome')) || 0;
+        let totalBalance = JSON.parse(localStorage.getItem('totalBalance')) || 0;
+
+        // DOM Elements
+        const expenseName = document.getElementById('expense-name');
+        const expenseAmount = document.getElementById('expense-amount');
+        const expenseDate = document.getElementById('expense-date');
+        const incomeAmount = document.getElementById('income-amount');
+        const incomeDate = document.getElementById('income-date');
+        const addExpenseButton = document.getElementById('add-expense');
+        const addIncomeButton = document.getElementById('add-income');
+        const expenseList = document.getElementById('expense-list');
+        const totalBalanceDisplay = document.getElementById('total-balance');
+        const totalIncomeDisplay = document.getElementById('total-income');
+        const remainingBalanceDisplay = document.getElementById('remaining-balance');
+        const printButton = document.getElementById('print-button');
+        const resetButton = document.getElementById('reset-button');
+        const saveButton = document.getElementById('save-button');
+
+        // Function to update the display
+        function updateDisplay() {
+            // Clear existing expense list
+            expenseList.innerHTML = '';
+
+            // Populate expense list
+            expenses.forEach(expense => {
+                const li = document.createElement('li');
+                li.innerHTML = `${expense.type} - ${expense.name}: Ksh ${expense.amount.toFixed(2)} <br> Date: ${expense.date} | Time: ${expense.time}`;
+                expenseList.appendChild(li);
+            });
+
+            // Update total income, balance, and remaining balance
+            totalIncomeDisplay.textContent = `Ksh ${totalIncome.toFixed(2)}`;
+            totalBalanceDisplay.textContent = `Ksh ${totalBalance.toFixed(2)}`;
+            remainingBalanceDisplay.textContent = `Ksh ${(totalIncome - totalBalance).toFixed(2)}`;
+
+            // Save to localStorage
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            localStorage.setItem('totalIncome', JSON.stringify(totalIncome));
+            localStorage.setItem('totalBalance', JSON.stringify(totalBalance));
+        }
+
+        // Add new expense
+        addExpenseButton.addEventListener('click', () => {
+            const name = expenseName.value;
+            const amount = parseFloat(expenseAmount.value);
+            const date = expenseDate.value;
+            const time = new Date().toLocaleTimeString();
+
+            if (name && !isNaN(amount) && amount > 0 && date) {
+                expenses.push({ type: 'Expense', name, amount, date, time });
+                totalBalance += amount; // Add the expense to the total balance
+                updateDisplay();
+
+                // Clear input fields
+                expenseName.value = '';
+                expenseAmount.value = '';
+                expenseDate.value = '';
+            } else {
+                alert('Please enter valid expense details.');
+            }
+        });
+
+        // Add income
+        addIncomeButton.addEventListener('click', () => {
+            const amount = parseFloat(incomeAmount.value);
+            const date = incomeDate.value;
+            const time = new Date().toLocaleTimeString();
+
+            if (!isNaN(amount) && amount > 0 && date) {
+                expenses.push({ type: 'Income', name: 'Income', amount, date, time });
+                totalIncome += amount; // Add income to total income
+                updateDisplay();
+
+                // Clear input fields
+                incomeAmount.value = '';
+                incomeDate.value = '';
+            } else {
+                alert('Please enter valid income details.');
+            }
+        });
+
+        // Print function
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Reset function
+        resetButton.addEventListener('click', () => {
+            // Clear localStorage
+            localStorage.removeItem('expenses');
+            localStorage.removeItem('totalIncome');
+            localStorage.removeItem('totalBalance');
+
+            // Reset all variables
+            expenses = [];
+            totalIncome = 0;
+            totalBalance = 0;
+
+            // Update the display
+            updateDisplay();
+        });
+
+        // Save to file function
+        saveButton.addEventListener('click', () => {
+            const dataToSave = {
+                expenses: expenses,
+                totalIncome: totalIncome,
+                totalBalance: totalBalance
+            };
+
+            const jsonData = JSON.stringify(dataToSave);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'budget-tracker-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Initial display on page load
+        updateDisplay();
+    </script>
+</body>
+</html>
+          localStorage.removeItem('totalBalance');
+
+            // Reset all variables
+            expenses = [];
+            totalIncome = 0;
+            totalBalance = 0;
+
+            // Update the display
+            updateDisplay();
+        });
+
+        // Save to file function
+        saveButton.addEventListener('click', () => {
+            const dataToSave = {
+                expenses: expenses,
+                totalIncome: totalIncome,
+                totalBalance: totalBalance
+            };
+
+            const jsonData = JSON.stringify(dataToSave);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = UR
